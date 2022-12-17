@@ -1,8 +1,14 @@
 package cz.cvut.fit.bioop.hackernewsclient
 
-object Main {
-  def main(args: Array[String]): Unit =
-    println(getGreeting)
+import cz.cvut.fit.bioop.hackernewsclient.controller.{Controller, HackerNewsController}
+import cz.cvut.fit.bioop.hackernewsclient.util.InputParser
 
-  def getGreeting: String = "Hello World"
+object Main {
+  def main(args: Array[String]): Unit = {
+
+    val inputArguments = InputParser.parseInput(args)
+    val controller: Controller = new HackerNewsController(inputArguments)
+
+    controller.execute()
+  }
 }
