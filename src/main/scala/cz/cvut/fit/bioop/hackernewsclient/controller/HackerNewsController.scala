@@ -2,7 +2,7 @@ package cz.cvut.fit.bioop.hackernewsclient.controller
 
 import cz.cvut.fit.bioop.hackernewsclient.command.Command
 import cz.cvut.fit.bioop.hackernewsclient.model.InputArguments
-import cz.cvut.fit.bioop.hackernewsclient.util.CommandParser
+import cz.cvut.fit.bioop.hackernewsclient.parser.command.CommandParser
 
 class HackerNewsController(inputArguments: InputArguments) extends Controller {
 

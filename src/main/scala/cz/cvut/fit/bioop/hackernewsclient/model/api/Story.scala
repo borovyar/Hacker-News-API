@@ -1,4 +1,4 @@
-package cz.cvut.fit.bioop.hackernewsclient.model
+package cz.cvut.fit.bioop.hackernewsclient.model.api
 
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import upickle.implicits.key

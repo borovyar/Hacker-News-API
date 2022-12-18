@@ -1,4 +1,4 @@
-package cz.cvut.fit.bioop.hackernewsclient.util
+package cz.cvut.fit.bioop.hackernewsclient.parser
 
 import cz.cvut.fit.bioop.hackernewsclient.model.InputArguments
 
