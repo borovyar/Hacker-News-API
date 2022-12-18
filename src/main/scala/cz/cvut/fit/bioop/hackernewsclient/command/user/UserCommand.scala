@@ -1,15 +1,17 @@
 package cz.cvut.fit.bioop.hackernewsclient.command.user
 
 import cz.cvut.fit.bioop.hackernewsclient.command.{Command, ErrorCommand}
+import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
 
-class UserCommand(id: String) extends Command{
+class UserCommand(api: HackerNewsApi,
+                  id: String) extends Command{
 
   override def execute(): Unit ={
-    val user = hackerNewsApi.loadUserById(id)
+    val user = api.loadUserById(id)
 
     if(user.isDefined)
-      println(user.get)
+      renderer.get.renderToConsole(user.get)
     else
-      println("User does not exist")
+      renderer.get.renderToConsole("User does not exist")
   }
 }

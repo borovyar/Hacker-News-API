@@ -23,7 +23,7 @@ case class Comment(@key("id") id: Int,
         "..."
 
     s"${Console.BOLD}${author.getOrElse("...")} at $date${Console.RESET}:" +
-      s" ${toFormattedText(text.getOrElse("..."))}\n"
+      s" ${toFormattedText(text.getOrElse("..."))}\n\n"
   }
 }
 

@@ -1,16 +1,18 @@
 package cz.cvut.fit.bioop.hackernewsclient.command.comment
 
 import cz.cvut.fit.bioop.hackernewsclient.command.Command
+import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
 
-class CommentCommand(id: Int,
+class CommentCommand(api: HackerNewsApi,
+                     id: Int,
                      page: Option[Int],
                      size: Option[Int]) extends Command{
 
   override def execute(): Unit = {
-    val story = hackerNewsApi.loadStoryById(id)
+    val story = api.loadStoryById(id)
 
     if(story.isEmpty || story.get.comments.isEmpty)
-      println("Story or Comments do not exist")
+      renderer.get.renderToConsole("Story or Comments do not exist")
     else
       printComments(story.get.comments.get)
   }
@@ -28,5 +30,5 @@ class CommentCommand(id: Int,
       neededIds.foreach(printComment)
   }
 
-  private def printComment(id: Int): Unit = println(hackerNewsApi.loadCommentById(id).get)
+  private def printComment(id: Int): Unit = renderer.get.renderToConsole(api.loadCommentById(id).get)
 }
