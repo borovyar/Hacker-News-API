@@ -10,6 +10,6 @@ class UserCommand(id: String) extends Command{
     if(user.isDefined)
       println(user.get)
     else
-      new ErrorCommand("User does not exist").execute()
+      println("User does not exist")
   }
 }

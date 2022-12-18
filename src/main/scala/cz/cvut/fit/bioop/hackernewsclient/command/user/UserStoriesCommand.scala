@@ -10,10 +10,15 @@ class UserStoriesCommand(id: String,
 
   override def execute() : Unit = {
     val user = hackerNewsApi.loadUserById(id)
-    if(user.isEmpty)
-      new ErrorCommand("User does not exist").execute()
+    if(user.isEmpty) {
+      println("User does not exist")
+      return
+    }
 
-    val storyIds = user.get.submitted.get
+    printStories(if(user.get.submitted.isDefined) user.get.submitted.get else Seq())
+  }
+
+  private def printStories(storyIds: Seq[Int]): Unit = {
     val neededIds =
       if(size.isDefined && storyIds.size > size.get)
         storyIds.take(size.get)

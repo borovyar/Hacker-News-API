@@ -1,5 +1,6 @@
 package cz.cvut.fit.bioop.hackernewsclient.parser.command
 
+import cz.cvut.fit.bioop.hackernewsclient.command.comment.CommentCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.{Command, ErrorCommand}
 import cz.cvut.fit.bioop.hackernewsclient.command.story.TopStoryCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.user.{UserCommand, UserStoriesCommand}
@@ -12,6 +13,7 @@ object ParseCommand {
       case "top-stories" => topStoriesCommand(commandOptions)
       case "user" => userCommand(commandOptions)
       case "user-stories" => userStoriesCommand(commandOptions)
+      case "comments" => commentsCommand(commandOptions)
       case _ => new ErrorCommand("Unknown command")
     }
   }
@@ -35,5 +37,12 @@ object ParseCommand {
       new UserStoriesCommand(commandOptions.get.getId.get, commandOptions.get.getPage, commandOptions.get.getSize)
     else
       new ErrorCommand("User without user Id")
+  }
+
+  private def commentsCommand(commandOptions: Option[CommandOptions]): Command = {
+    if(commandOptions.isDefined && commandOptions.get.getId.isDefined)
+      new CommentCommand(commandOptions.get.getId.get.toInt, commandOptions.get.getPage, commandOptions.get.getSize)
+    else
+      new ErrorCommand("Comment without Id")
   }
 }

@@ -17,7 +17,8 @@ case class User(@key("id") id: String,
     val numberOfStories = submitted.getOrElse(List()).size
     val aboutUser = about.getOrElse("...")
     val registrationDate = LocalDateTime.ofInstant(
-      Instant.ofEpochSecond(created), ZoneId.systemDefault()
+      Instant.ofEpochSecond(created),
+      ZoneId.systemDefault()
     ).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))
 
     s"The user ${Console.BOLD}$id wrote about himself: ${toFormattedText(aboutUser)}.\n" +
