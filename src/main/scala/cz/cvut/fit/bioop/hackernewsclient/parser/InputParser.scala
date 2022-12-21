@@ -15,7 +15,7 @@ object InputParser {
       case cmdOption if command.isDefined => commandOptions = cmdOption :: commandOptions
     }
 
-    new InputArguments(option, command, commandOptions)
+    InputArguments(option, command, commandOptions)
   }
 
 }

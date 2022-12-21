@@ -8,6 +8,7 @@ class RendererImpl extends Renderer{
 
   override def renderToOutputStream[T](entity: T, out: OutputStream): Unit ={
     out.write(entity.toString.getBytes)
+    out.write('\n')
     out.flush()
   }
 }

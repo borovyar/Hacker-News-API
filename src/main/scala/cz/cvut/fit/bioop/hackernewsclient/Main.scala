@@ -11,7 +11,7 @@ object Main {
     val inputArguments = InputParser.parseInput(args)
     val restApi: HackerNewsApi = new HackerNewsApiImpl
     val renderer: Renderer = new RendererImpl
-    val controller: Controller = new HackerNewsController(inputArguments, restApi, renderer)
+    val controller: Controller = new HackerNewsController(restApi, renderer, inputArguments )
 
     controller.execute()
   }
