@@ -11,7 +11,7 @@ class TopStoryCommand(api: HackerNewsApi,
                       size: Option[Int]) extends Command{
 
   override def execute() : Unit = {
-    val printCommand = new PrintItemCommand[Story](api, renderer, api.loadTopStories(), page, size)
+    val printCommand = new PrintStoryCommand(api, renderer, api.loadTopStories(), page, size)
     printCommand.execute()
   }
 

@@ -1,9 +1,8 @@
 package cz.cvut.fit.bioop.hackernewsclient.command.user
 
 import cz.cvut.fit.bioop.hackernewsclient.command.Command
-import cz.cvut.fit.bioop.hackernewsclient.command.story.PrintItemCommand
+import cz.cvut.fit.bioop.hackernewsclient.command.story.PrintStoryCommand
 import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
-import cz.cvut.fit.bioop.hackernewsclient.model.api.Story
 import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
 
 class UserStoriesCommand(api: HackerNewsApi,
@@ -23,6 +22,6 @@ class UserStoriesCommand(api: HackerNewsApi,
   }
 
   private def printStories(storyIds: Seq[Int]): Unit =
-    new PrintItemCommand[Story](api, renderer, storyIds, page, size).execute()
+    new PrintStoryCommand(api, renderer, storyIds, page, size).execute()
 
 }
