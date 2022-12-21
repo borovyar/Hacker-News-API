@@ -1,5 +1,8 @@
 package cz.cvut.fit.bioop.hackernewsclient.converter
 
+/***
+ * Converter of models
+ */
 object Converter extends upickle.AttributeTagged {
   override implicit def OptionWriter[T: Writer]: Writer[Option[T]] =
     implicitly[Writer[T]].comap[Option[T]] {

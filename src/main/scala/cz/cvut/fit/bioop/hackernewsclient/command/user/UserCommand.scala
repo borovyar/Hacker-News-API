@@ -9,6 +9,7 @@ class UserCommand(api: HackerNewsApi,
                   id: String) extends Command{
 
   override def execute(): Unit ={
+    //load user using id form hacker news api
     val user = api.loadUserById(id)
 
     if(user.isDefined)

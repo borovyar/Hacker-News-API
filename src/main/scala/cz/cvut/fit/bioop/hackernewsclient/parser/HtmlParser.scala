@@ -1,9 +1,16 @@
 package cz.cvut.fit.bioop.hackernewsclient.parser
 
+/***
+ * Render HTML text
+ */
 object HtmlParser {
 
   implicit class HtmlText(htmlText: String) {
 
+    /***
+     * Replaces special HTML characters with equivalent character in ASCII
+     * @return
+     */
     def replaceHtmlCharacters(): String = {
       var result = htmlText
       HtmlParser.specialCharacters.foreachEntry((symbol, character) =>
@@ -13,6 +20,12 @@ object HtmlParser {
     }
   }
 
+  /***
+   * Parse HTML text to common one by replacement HTML tags and special characters
+   *
+   * @param text in HTML
+   * @return common text
+   */
   def toFormattedText(text: String): String = {
     val buffer = text.replaceHtmlCharacters().replaceAll("<p>", "\n")
 

@@ -7,6 +7,9 @@ import upickle.implicits.key
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
+/***
+ * Model of the User entity
+ */
 case class User(@key("id") id: String,
                 @key("created") created: Long,
                 @key("karma") karma: Int,

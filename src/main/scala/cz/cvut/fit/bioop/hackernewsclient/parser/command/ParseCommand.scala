@@ -8,8 +8,21 @@ import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
 import cz.cvut.fit.bioop.hackernewsclient.model.CommandOptions
 import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
 
+/***
+ * Parses main command of application
+ */
 object ParseCommand {
 
+  /***
+   * Chooses correct Command object using a command from application arguments
+   * and command options.
+   *
+   * @param api should be passed to the commands
+   * @param renderer should be passed to the commands
+   * @param command string which should be command
+   * @param commandOptions to customize command
+   * @return Command which has to be executed
+   */
   def getCommand(api: HackerNewsApi,
                  renderer: Renderer,
                  command: String,

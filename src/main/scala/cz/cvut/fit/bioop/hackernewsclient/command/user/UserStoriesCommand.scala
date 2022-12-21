@@ -13,11 +13,13 @@ class UserStoriesCommand(api: HackerNewsApi,
 
 
   override def execute() : Unit = {
+    //load user using id from hacker news api
     val user = api.loadUserById(id)
 
     if(user.isEmpty)
       renderer.renderToConsole("User does not exist")
     else
+      //print stories of the user if they are present
       printStories(if(user.get.submitted.isDefined) user.get.submitted.get else Seq())
   }
 

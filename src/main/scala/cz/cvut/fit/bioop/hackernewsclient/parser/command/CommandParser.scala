@@ -8,8 +8,19 @@ import cz.cvut.fit.bioop.hackernewsclient.parser.command.ParseCommandOptions.get
 import cz.cvut.fit.bioop.hackernewsclient.parser.command.ParseOption.getOption
 import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
 
+/***
+ *  Main object of parsing command procedure
+ */
 object CommandParser {
 
+  /***
+   * Determines correct commands with their options for application input
+   *
+   * @param api should be passed to commands
+   * @param renderer should be passed to commands
+   * @param args application input
+   * @return Command which should be executed
+   */
   def parseCommand(api: HackerNewsApi,
                    renderer: Renderer,
                    args: InputArguments): Command = {

@@ -1,12 +1,15 @@
 package cz.cvut.fit.bioop.hackernewsclient.model.api
 
-import cz.cvut.fit.bioop.hackernewsclient.parser.HtmlParser._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
+import cz.cvut.fit.bioop.hackernewsclient.parser.HtmlParser._
 import upickle.implicits.key
 
 import java.time.format.DateTimeFormatter
 import java.time.{Instant, LocalDateTime, ZoneId}
 
+/***
+ * Model of the Comment entity
+ */
 case class Comment(@key("id") id: Int,
                    @key("by") author: Option[String] = None,
                    @key("time") created: Option[Long] = None,

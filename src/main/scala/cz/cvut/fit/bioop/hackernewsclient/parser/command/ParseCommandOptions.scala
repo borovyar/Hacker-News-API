@@ -4,8 +4,17 @@ import cz.cvut.fit.bioop.hackernewsclient.model.CommandOptions
 
 import scala.language.postfixOps
 
+/***
+ * Parses options of the application command
+ */
 object ParseCommandOptions {
 
+  /***
+   * Parse command options using several regex
+   *
+   * @param commandOptions which should be determined
+   * @return CommandOptions object with all command options
+   */
   def getCommandOptions(commandOptions: List[String]): CommandOptions = {
     var newSize: Option[Int] = None
     var newPage: Option[Int] = None

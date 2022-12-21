@@ -2,8 +2,17 @@ package cz.cvut.fit.bioop.hackernewsclient.parser
 
 import cz.cvut.fit.bioop.hackernewsclient.model.InputArguments
 
+/***
+ * Input parser for application arguments
+ */
 object InputParser {
 
+  /***
+   * Gives only parsed parameters (without commands)
+   *
+   * @param args arguments of the application
+   * @return InputArguments model or null if arguments were not satisfiable
+   */
   def parseInput(args: Array[String]): InputArguments = {
     var option: Option[String] = None
     var command: Option[String] = None

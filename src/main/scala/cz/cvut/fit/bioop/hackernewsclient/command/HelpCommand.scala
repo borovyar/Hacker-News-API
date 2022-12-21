@@ -4,6 +4,7 @@ import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
 
 class HelpCommand(renderer: Renderer) extends Command {
   override def execute(): Unit = {
+    //common string to be displayed after --help option
     val message: String = """Options:
                             --help - Information about available command and their usage.
 

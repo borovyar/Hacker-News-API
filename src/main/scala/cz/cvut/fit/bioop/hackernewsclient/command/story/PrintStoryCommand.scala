@@ -14,8 +14,11 @@ class PrintStoryCommand(api: HackerNewsApi,
   def collectItem(id: Int) : Option[Story] = api.loadStoryById(id)
 
   override def execute(): Unit = {
+    //parse needed ids if command options present
     val resultIds = getNeededIDs(ids)
+    //load stories using ids from hacker news api
     val stories = resultIds.map(collectItem)
+    //print of the stories using a render
     for(story <- stories) renderer.renderToConsole(if(story.isDefined) story.get else "Not existed id")
   }
 
