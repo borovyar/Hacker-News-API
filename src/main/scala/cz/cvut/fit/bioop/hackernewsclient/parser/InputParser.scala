@@ -9,10 +9,15 @@ object InputParser {
     var command: Option[String] = None
     var commandOptions = List.empty[String]
 
+    if(args.isEmpty)
+      return null
+
     args.foreach {
       case opt if opt.startsWith("--") && command.isEmpty => option = Some(opt)
       case cmd if command.isEmpty => command = Some(cmd)
-      case cmdOption if command.isDefined => commandOptions = cmdOption :: commandOptions
+      case cmdOption if cmdOption.startsWith("--") && command.isDefined => commandOptions = cmdOption :: commandOptions
+      case _ => return null
+
     }
 
     InputArguments(option, command, commandOptions)

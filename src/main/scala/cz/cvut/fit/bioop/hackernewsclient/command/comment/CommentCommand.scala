@@ -1,7 +1,7 @@
 package cz.cvut.fit.bioop.hackernewsclient.command.comment
 
 import cz.cvut.fit.bioop.hackernewsclient.command.Command
-import cz.cvut.fit.bioop.hackernewsclient.command.story.PrintItemCommand
+import cz.cvut.fit.bioop.hackernewsclient.command.story.PrintStoryCommand
 import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
 import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story}
 import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
@@ -13,7 +13,7 @@ class CommentCommand(api: HackerNewsApi,
                      size: Option[Int]) extends Command{
 
   override def execute(): Unit = {
-    val story = api.loadItemById[Story](id)
+    val story = api.loadStoryById(id)
 
     if(story.isEmpty || story.get.comments.isEmpty)
       renderer.renderToConsole("Story or Comments does not exist")
@@ -22,8 +22,19 @@ class CommentCommand(api: HackerNewsApi,
   }
 
   private def printComments(ids: Seq[Int]): Unit = {
-    val printCommand = new PrintItemCommand[Comment](api, renderer, ids, page, size)
-    printCommand.execute()
+    val commentsIds = getNeededIDs(ids)
+    for(id <- commentsIds) {
+      val comment = api.loadCommentById(id)
+      renderer.renderToConsole(if(comment.isDefined) comment.get else "Not existed id")
+    }
+  }
+
+
+private def getNeededIDs(ids: Seq[Int]): Seq[Int] = {
+  page.flatMap(page => return if(page - 1 <= ids.size) Seq(ids.apply(page - 1)) else Seq(ids.last))
+  size.flatMap(size => return if(size <= ids.size) ids.take(size) else ids)
+
+  ids.take(20)
   }
 
 }

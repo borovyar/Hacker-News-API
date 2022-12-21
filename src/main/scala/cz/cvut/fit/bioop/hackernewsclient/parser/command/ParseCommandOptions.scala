@@ -2,6 +2,8 @@ package cz.cvut.fit.bioop.hackernewsclient.parser.command
 
 import cz.cvut.fit.bioop.hackernewsclient.model.CommandOptions
 
+import scala.language.postfixOps
+
 object ParseCommandOptions {
 
   def getCommandOptions(commandOptions: List[String]): CommandOptions = {
