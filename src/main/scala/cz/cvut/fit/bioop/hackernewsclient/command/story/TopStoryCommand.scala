@@ -1,19 +1,13 @@
 package cz.cvut.fit.bioop.hackernewsclient.command.story
 
-import cz.cvut.fit.bioop.hackernewsclient.command.Command
-import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
-import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
+import cz.cvut.fit.bioop.hackernewsclient.command.{Command, CommandReceiver}
+import cz.cvut.fit.bioop.hackernewsclient.model.PagingOptions
 
-class TopStoryCommand(api: HackerNewsApi,
-                      renderer: Renderer,
-                      page: Option[Int],
-                      size: Option[Int]) extends Command{
+class TopStoryCommand(commandReceiver: CommandReceiver,
+                      pageOptions: PagingOptions) extends Command{
 
   override def execute() : Unit = {
-    //load a top stories and immediately pass them to print command
-    val printCommand = new PrintStoryCommand(api, renderer, api.loadTopStories(), page, size)
-    printCommand.execute()
+    commandReceiver.runTopStoriesCommand(pageOptions)
   }
-
 
 }

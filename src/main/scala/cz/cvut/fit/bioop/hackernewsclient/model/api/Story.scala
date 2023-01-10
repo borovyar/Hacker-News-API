@@ -15,13 +15,6 @@ case class Story(@key("id") id: Int,
                 ){
 
 
-  override def toString: String = {
-    val commentsNumber = if(comments.isDefined) comments.get.size else 0
-
-    s"${Console.BOLD}${title.getOrElse("-")}${Console.RESET} (${url.getOrElse("-")})\n" +
-      s"\t${score.getOrElse("-")} points by ${author.getOrElse("-")} | $commentsNumber comments\n"
-
-  }
 }
 
 object Story {

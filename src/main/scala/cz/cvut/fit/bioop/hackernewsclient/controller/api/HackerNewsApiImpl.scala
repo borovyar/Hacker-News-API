@@ -1,7 +1,7 @@
 package cz.cvut.fit.bioop.hackernewsclient.controller.api
 
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
-import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, User}
+import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, Update, User}
 import cz.cvut.fit.bioop.hackernewsclient.util.BufferUtil.BufferFormat
 
 import scala.io.Source
@@ -27,6 +27,10 @@ class HackerNewsApiImpl extends HackerNewsApi {
 
   override def loadUserById(id: String): Option[User] = {
     makeApiCall[User](s"$url/user/$id.json")
+  }
+
+  override def loadUpdates(): Option[Update] = {
+    makeApiCall[Update](s"$url/updates")
   }
 
   private def makeApiCall[T: Reader](path: String): Option[T] = {

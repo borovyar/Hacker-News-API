@@ -1,93 +1,91 @@
 package cz.cvut.fit.bioop.hackernewsclient.parser.command
 
+import cz.cvut.fit.bioop.hackernewsclient.command.cache.ClearCacheCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.comment.CommentCommand
+import cz.cvut.fit.bioop.hackernewsclient.command.other.ErrorCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.story.TopStoryCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.user.{UserCommand, UserStoriesCommand}
-import cz.cvut.fit.bioop.hackernewsclient.command.{Command, ErrorCommand}
-import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
-import cz.cvut.fit.bioop.hackernewsclient.model.CommandOptions
-import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
+import cz.cvut.fit.bioop.hackernewsclient.command.{Command, CommandReceiver}
+import cz.cvut.fit.bioop.hackernewsclient.model.{CommandOptions, PagingOptions}
 
 /***
  * Parses main command of application
  */
-object ParseCommand {
+class ParseCommand(receiver: CommandReceiver) {
 
   /***
    * Chooses correct Command object using a command from application arguments
    * and command options.
    *
-   * @param api should be passed to the commands
-   * @param renderer should be passed to the commands
    * @param command string which should be command
    * @param commandOptions to customize command
    * @return Command which has to be executed
    */
-  def getCommand(api: HackerNewsApi,
-                 renderer: Renderer,
-                 command: String,
+  def getCommand(command: String,
                  commandOptions: Option[CommandOptions]): Command = {
 
-    command match {
-      case "top-stories" => topStoriesCommand(api, renderer, commandOptions)
-      case "user" => userCommand(api, renderer, commandOptions)
-      case "user-stories" => userStoriesCommand(api, renderer, commandOptions)
-      case "comments" => commentsCommand(api, renderer, commandOptions)
-      case _ => new ErrorCommand("Unknown command")
+    try {
+      command match {
+        case "top-stories" => topStoriesCommand(commandOptions)
+        case "user" => userCommand(commandOptions)
+        case "user-stories" => userStoriesCommand(commandOptions)
+        case "comments" => commentsCommand(commandOptions)
+        case "clear-cache" => clearCacheCommand()
+        case _ => new ErrorCommand("Unknown command")
+      }
+    }catch {
+      case _: Throwable => new ErrorCommand("Command parsing error. Wrong option arguments")
     }
   }
 
-  private def topStoriesCommand(api: HackerNewsApi,
-                                renderer: Renderer,
-                                commandOptions: Option[CommandOptions]): Command = {
+  private def topStoriesCommand(commandOptions: Option[CommandOptions]): Command = {
     new TopStoryCommand(
-      api,
-      renderer,
-      commandOptions.flatMap(_.page),
-      commandOptions.flatMap(_.size)
+      receiver, PagingOptions(
+        commandOptions.flatMap(_.page),
+        commandOptions.flatMap(_.size).getOrElse(20)
+      )
     )
   }
 
-  private def userCommand(api: HackerNewsApi,
-                          renderer: Renderer,
-                          commandOptions: Option[CommandOptions]): Command ={
+  private def userCommand(commandOptions: Option[CommandOptions]): Command ={
     if(commandOptions.get.id.isDefined)
       new UserCommand(
-        api,
-        renderer,
+        receiver,
         commandOptions.get.id.get
       )
     else
       new ErrorCommand("User without user Id")
   }
 
-  private def userStoriesCommand(api: HackerNewsApi,
-                                 renderer: Renderer,
-                                 commandOptions: Option[CommandOptions]): Command = {
+  private def userStoriesCommand(commandOptions: Option[CommandOptions]): Command = {
     if(commandOptions.isDefined && commandOptions.get.id.isDefined)
       new UserStoriesCommand(
-        api,
-        renderer,
+        receiver,
         commandOptions.get.id.get,
-        commandOptions.get.page,
-        commandOptions.get.size
+        PagingOptions(
+          commandOptions.flatMap(_.page),
+          commandOptions.flatMap(_.size).getOrElse(20)
+        )
       )
     else
       new ErrorCommand("User without user Id")
   }
 
-  private def commentsCommand(api: HackerNewsApi,
-                              renderer: Renderer,
-                              commandOptions: Option[CommandOptions]): Command = {
+  private def commentsCommand(commandOptions: Option[CommandOptions]): Command = {
     if(commandOptions.isDefined && commandOptions.get.id.isDefined)
       new CommentCommand(
-        api,
-        renderer,
+        receiver,
         commandOptions.get.id.get.toInt,
-        commandOptions.get.page,
-        commandOptions.get.size
+        PagingOptions(
+          commandOptions.flatMap(_.page),
+          commandOptions.flatMap(_.size).getOrElse(20)
+        )
       )
     else
       new ErrorCommand("Comment without Id")
+  }
+
+  private def clearCacheCommand(): Command = {
+    new ClearCacheCommand(receiver)
   }
 }

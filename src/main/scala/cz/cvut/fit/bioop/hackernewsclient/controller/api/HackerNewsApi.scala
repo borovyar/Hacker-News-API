@@ -1,6 +1,6 @@
 package cz.cvut.fit.bioop.hackernewsclient.controller.api
 
-import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, User}
+import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, Update, User}
 
 trait HackerNewsApi {
 
@@ -34,5 +34,8 @@ trait HackerNewsApi {
    * @return Optional of the needed user
    */
   def loadUserById(id: String): Option[User]
+
+
+  def loadUpdates(): Option[Update]
 
 }

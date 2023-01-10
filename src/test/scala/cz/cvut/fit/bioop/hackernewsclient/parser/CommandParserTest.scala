@@ -1,17 +1,15 @@
 package cz.cvut.fit.bioop.hackernewsclient.parser
 
-import cz.cvut.fit.bioop.hackernewsclient.command.{ErrorCommand, HelpCommand}
 import cz.cvut.fit.bioop.hackernewsclient.command.comment.CommentCommand
-import cz.cvut.fit.bioop.hackernewsclient.command.story.{TopCommandStoryTest, TopStoryCommand}
+import cz.cvut.fit.bioop.hackernewsclient.command.other.{ErrorCommand, HelpCommand}
+import cz.cvut.fit.bioop.hackernewsclient.command.story.TopStoryCommand
 import cz.cvut.fit.bioop.hackernewsclient.command.user.{UserCommand, UserStoriesCommand}
 import cz.cvut.fit.bioop.hackernewsclient.controller.api.HackerNewsApi
-import cz.cvut.fit.bioop.hackernewsclient.model.InputArguments
-import cz.cvut.fit.bioop.hackernewsclient.parser.command.CommandParser
-import cz.cvut.fit.bioop.hackernewsclient.renderer.{Renderer, RendererImpl}
-import org.mockito.ArgumentMatchers.{any, intThat}
+import cz.cvut.fit.bioop.hackernewsclient.renderer.Renderer
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.doNothing
 import org.mockito.MockitoSugar.mock
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 
 class CommandParserTest extends AnyFunSuite with BeforeAndAfterEach{

@@ -17,19 +17,23 @@ object InputParser {
     var option: Option[String] = None
     var command: Option[String] = None
     var commandOptions = List.empty[String]
+    var ttl: Option[Long] = None
 
     if(args.isEmpty)
       return null
 
     args.foreach {
+      case ttlOpt if ttlOpt.matches("--ttl=\\d+") && ttl.isEmpty =>
+        ttl = Some("""\d+""".r.findFirstIn(ttlOpt).getOrElse("").toInt)
+        println(ttl)
       case opt if opt.startsWith("--") && command.isEmpty => option = Some(opt)
       case cmd if command.isEmpty => command = Some(cmd)
       case cmdOption if cmdOption.startsWith("--") && command.isDefined => commandOptions = cmdOption :: commandOptions
       case _ => return null
-
     }
 
-    InputArguments(option, command, commandOptions)
+    InputArguments(option, command, commandOptions, ttl)
   }
+
 
 }

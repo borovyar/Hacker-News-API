@@ -1,5 +1,7 @@
 package cz.cvut.fit.bioop.hackernewsclient.renderer
 
+import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, User}
+
 import java.io.OutputStream
 
 /***
@@ -13,7 +15,7 @@ trait Renderer {
    * @param entity which should be printed
    * @tparam T type of following entity
    */
-  def renderToConsole[T](entity: T): Unit
+  def renderToConsole(message: String): Unit
 
 
   /***
@@ -24,5 +26,9 @@ trait Renderer {
    * @tparam T type of following entity
    */
   def renderToOutputStream[T](entity: T, out: OutputStream): Unit
+
+  def renderStory(story: Story): Unit
+  def renderComment(comment: Comment): Unit
+  def renderUser(user: User): Unit
 
 }
