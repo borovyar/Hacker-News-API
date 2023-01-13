@@ -5,7 +5,7 @@ import upickle.implicits.key
 
 
 case class Update(@key("items") items: Seq[Int],
-                  @key("profiles") profiles: Seq[String]){
+                  @key("profiles") profiles: Seq[String]) extends Entity {
 
 }
 

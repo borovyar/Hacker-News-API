@@ -12,7 +12,7 @@ case class Story(@key("id") id: Int,
                  @key("url") url: Option[String] = None,
                  @key("score") score: Option[Int] = None,
                  @key("title") title: Option[String] = None,
-                ){
+                ) extends Entity {
 
 
 }

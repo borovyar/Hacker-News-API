@@ -3,7 +3,7 @@ package cz.cvut.fit.bioop.hackernewsclient.repository.cache
 import cz.cvut.fit.bioop.hackernewsclient.Properties._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Serializable
-import cz.cvut.fit.bioop.hackernewsclient.model.api.Update
+import cz.cvut.fit.bioop.hackernewsclient.model.api._
 import cz.cvut.fit.bioop.hackernewsclient.model.cache.{CacheData, CacheEntity}
 import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileSystem
 
@@ -23,7 +23,7 @@ class CacheImpl(ttl: Option[Long],
 
     val updateTime = if (cacheData.isDefined) cacheData.get.updateTime else System.currentTimeMillis()
 
-    val indexOfCachedEntity = bufferCache.indexWhere({entity => entity.id == id.toString })
+    val indexOfCachedEntity = bufferCache.indexWhere({ entity => entity.id == id.toString })
     if (indexOfCachedEntity != -1) {
       bufferCache(indexOfCachedEntity) = cacheEntity
     }
@@ -34,21 +34,6 @@ class CacheImpl(ttl: Option[Long],
     fileSystem.saveData(CacheData(updateTime, bufferCache.toSeq))
   }
 
-  override def getEntity[T: Reader, ID](id: ID): Option[T] = {
-    val cacheEntity = loadEntityFromCache[ID](id)
-
-    if(cacheEntity == null || cacheEntity.isEmpty)
-      return None
-
-    try {
-
-      Some(read[T](cacheEntity.get.entity))
-
-    }catch {
-      case _: Throwable => None
-    }
-  }
-
   override def clearCache(): Unit = {
     fileSystem.clearData()
   }
@@ -56,7 +41,7 @@ class CacheImpl(ttl: Option[Long],
   override def isUpdated: Boolean = {
     val cacheData = fileSystem.loadData()
 
-    if(cacheData.isEmpty)
+    if (cacheData.isEmpty)
       return false
 
     cacheData.get.updateTime > (System.currentTimeMillis() - DEFAULT_UPDATE_TIME)
@@ -64,11 +49,11 @@ class CacheImpl(ttl: Option[Long],
 
   override def performUpdate(update: Update): Unit = {
     val cacheData = fileSystem.loadData()
-    if(cacheData == null || update == null || cacheData.isEmpty)
+    if (cacheData == null || update == null || cacheData.isEmpty)
       return
 
     val cacheEntities = cacheData.get.entities
-    if(cacheEntities == null || cacheEntities.isEmpty)
+    if (cacheEntities == null || cacheEntities.isEmpty)
       return
 
     deleteItems(cacheEntities, update.items)
@@ -91,27 +76,42 @@ class CacheImpl(ttl: Option[Long],
     fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
   }
 
-  private def loadEntityFromCache[T](id: T): Option[CacheEntity] ={
-    val cacheData = fileSystem.loadData().getOrElse(return None)
+  override def getUser(id: String): Option[User] = {
+    val cacheEntity = fileSystem.loadEntity[id.type](id)
 
-    val cacheEntities = cacheData.entities
-    val indexOfCachedEntity = cacheEntities.indexWhere({ entity => entity.id == id.toString })
-
-    if (indexOfCachedEntity == -1) {
+    if (cacheEntity == null || cacheEntity.isEmpty)
       return None
+
+    try {
+      Some(read[User](cacheEntity.get.entity))
+    } catch {
+      case _: Throwable => None
     }
-
-    if (cacheEntities(indexOfCachedEntity).ttl > System.currentTimeMillis()) {
-      return Some(cacheEntities(indexOfCachedEntity))
-    }
-
-    val updatedCacheItems = cacheEntities.toBuffer
-
-    updatedCacheItems.remove(indexOfCachedEntity)
-    fileSystem.saveData(CacheData(cacheData.updateTime, updatedCacheItems.toSeq))
-
-    None
   }
 
+  override def getComment(id: Int): Option[Comment] = {
+    val cacheEntity = fileSystem.loadEntity[id.type](id)
 
+    if (cacheEntity == null || cacheEntity.isEmpty)
+      return None
+
+    try {
+      Some(read[Comment](cacheEntity.get.entity))
+    } catch {
+      case _: Throwable => None
+    }
+  }
+
+  override def getStory(id: Int): Option[Story] = {
+    val cacheEntity = fileSystem.loadEntity[id.type](id)
+
+    if (cacheEntity == null || cacheEntity.isEmpty)
+      return None
+
+    try {
+      Some(read[Story](cacheEntity.get.entity))
+    } catch {
+      case _: Throwable => None
+    }
+  }
 }

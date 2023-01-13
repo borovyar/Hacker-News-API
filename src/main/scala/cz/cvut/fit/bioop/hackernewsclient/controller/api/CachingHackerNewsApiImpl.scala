@@ -22,7 +22,7 @@ class CachingHackerNewsApiImpl(api: HackerNewsApi,
    * @return Optional of the needed story
    */
   override def loadStoryById(id: Int): Option[Story] = {
-    val cachedStory = cache.getEntity[Story, Int](id)
+    val cachedStory = cache.getStory(id)
 
     if(cachedStory.isDefined){
       return cachedStory
@@ -45,7 +45,7 @@ class CachingHackerNewsApiImpl(api: HackerNewsApi,
   override def loadCommentById(id: Int): Option[Comment] = {
     checkCacheUpdate()
 
-    val cachedComment = cache.getEntity[Comment, Int](id)
+    val cachedComment = cache.getComment(id)
 
     if(cachedComment.isDefined) {
       return cachedComment
@@ -67,7 +67,7 @@ class CachingHackerNewsApiImpl(api: HackerNewsApi,
   override def loadUserById(id: String): Option[User] = {
     checkCacheUpdate()
 
-    val cachedUser = cache.getEntity[User, String](id)
+    val cachedUser = cache.getUser(id)
 
     if(cachedUser.isDefined) {
       return cachedUser
