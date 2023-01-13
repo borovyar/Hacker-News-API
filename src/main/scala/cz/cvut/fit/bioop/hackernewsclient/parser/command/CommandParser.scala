@@ -23,6 +23,9 @@ class CommandParser(parseCommand: ParseCommand,
 
     val commandOptions = Some(ParseCommandOptions.getCommandOptions(args.commandOptions))
 
+    if(commandOptions == null)
+      return new ErrorCommand("Wrong command")
+
     parseCommand.getCommand(
       args.command.getOrElse(return new ErrorCommand("Empty command")),
       commandOptions

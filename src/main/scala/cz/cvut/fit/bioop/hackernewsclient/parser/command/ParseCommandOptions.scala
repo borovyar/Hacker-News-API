@@ -29,6 +29,7 @@ object ParseCommandOptions {
             newSize = Some("""\d+""".r.findFirstIn(size).getOrElse("").toInt)
           case id if id.matches("--id=([^\\\\s]*)") =>
             newId = Some("""--id=([^\\s]*)""".r.findFirstMatchIn(id).get.group(1))
+          case _ => return null
         }
     }catch {
       case _: Throwable => return null

@@ -4,13 +4,11 @@ import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Serializable
 import cz.cvut.fit.bioop.hackernewsclient.model.api.Update
 import cz.cvut.fit.bioop.hackernewsclient.model.cache.{CacheData, CacheEntity}
+import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileSystem
 
-import java.io.{File, FileNotFoundException, PrintWriter}
-import scala.io.Source
+class CacheImpl(ttl: Option[Long],
+                fileSystem: FileSystem[CacheData]) extends Cache {
 
-class CacheImpl(ttl: Option[Long]) extends Cache {
-
-  private val CACHE_FIlE_NAME = "cachedData.json"
   private val DEFAULT_TTL = 30 * 6000L
   private val DEFAULT_UPDATE_TIME = 10L * 60 * 1000L
 
@@ -21,7 +19,7 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
       converter.toJson(entity)
     )
 
-    val cacheData = loadCachedData()
+    val cacheData = fileSystem.loadData()
     val bufferCache =
       (if (cacheData.isDefined) cacheData.get.entities else Seq()).toBuffer
 
@@ -35,7 +33,7 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
       bufferCache.append(cacheEntity)
     }
 
-    saveCachedData(CacheData(updateTime, bufferCache.toSeq))
+    fileSystem.saveData(CacheData(updateTime, bufferCache.toSeq))
   }
 
   override def getEntity[T: Reader, ID](id: ID): Option[T] = {
@@ -54,14 +52,11 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
   }
 
   override def clearCache(): Unit = {
-    val file = new File(CACHE_FIlE_NAME)
-
-    if(file != null && file.exists())
-      file.delete()
+    fileSystem.clearData()
   }
 
   override def isUpdated: Boolean = {
-    val cacheData = loadCachedData()
+    val cacheData = fileSystem.loadData()
 
     if(cacheData.isEmpty)
       return false
@@ -70,7 +65,7 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
   }
 
   override def performUpdate(update: Update): Unit = {
-    val cacheData = loadCachedData()
+    val cacheData = fileSystem.loadData()
     if(cacheData == null || update == null || cacheData.isEmpty)
       return
 
@@ -87,7 +82,7 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
     val updatedCache = cacheEntities.filter(
       entity => ids.indexOf(entity.id.toInt) == -1
     )
-    saveCachedData(CacheData(System.currentTimeMillis(), updatedCache))
+    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
   }
 
   private def deleteUsers(cacheEntities: Seq[CacheEntity],
@@ -95,11 +90,11 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
     val updatedCache = cacheEntities.filter(
       entity => ids.indexOf(entity.id) == -1
     )
-    saveCachedData(CacheData(System.currentTimeMillis(), updatedCache))
+    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
   }
 
   private def loadEntityFromCache[T](id: T): Option[CacheEntity] ={
-    val cacheData = loadCachedData().getOrElse(return None)
+    val cacheData = fileSystem.loadData().getOrElse(return None)
 
     val cacheEntities = cacheData.entities
     val indexOfCachedEntity = cacheEntities.indexWhere({ entity => entity.id == id.toString })
@@ -115,26 +110,10 @@ class CacheImpl(ttl: Option[Long]) extends Cache {
     val updatedCacheItems = cacheEntities.toBuffer
 
     updatedCacheItems.remove(indexOfCachedEntity)
-    saveCachedData(CacheData(cacheData.updateTime, updatedCacheItems.toSeq))
+    fileSystem.saveData(CacheData(cacheData.updateTime, updatedCacheItems.toSeq))
 
     None
   }
 
-  private def loadCachedData(): Option[CacheData] = {
-    try{
-      val buffer = Source.fromFile(CACHE_FIlE_NAME)
-      val strings = buffer.getLines().mkString; buffer.close()
 
-      Some(read[CacheData](strings))
-    }catch {
-      case _: FileNotFoundException => None
-    }
-  }
-
-  private def saveCachedData(cacheData: CacheData): Unit = {
-    val printWriter = new PrintWriter(new File(CACHE_FIlE_NAME))
-
-    printWriter.write(write(cacheData))
-    printWriter.close()
-  }
 }

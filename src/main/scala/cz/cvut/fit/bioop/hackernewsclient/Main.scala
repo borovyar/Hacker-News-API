@@ -8,6 +8,7 @@ import cz.cvut.fit.bioop.hackernewsclient.parser.InputParser
 import cz.cvut.fit.bioop.hackernewsclient.parser.command.{CommandParser, ParseCommand, ParseOption}
 import cz.cvut.fit.bioop.hackernewsclient.renderer.{Renderer, RendererImpl}
 import cz.cvut.fit.bioop.hackernewsclient.repository.cache.CacheImpl
+import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileCacheSystemImpl
 import cz.cvut.fit.bioop.hackernewsclient.repository.{Repository, RepositoryImpl}
 
 object Main {
@@ -18,7 +19,7 @@ object Main {
       new ErrorCommand("Wrong input arguments").execute()
     else {
 
-      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(inputArguments.ttl))
+      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(inputArguments.ttl, new FileCacheSystemImpl))
       val renderer: Renderer = new RendererImpl
 
       val repository: Repository = new RepositoryImpl(restApi)
