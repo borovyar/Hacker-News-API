@@ -1,4 +1,5 @@
 package cz.cvut.fit.bioop.hackernewsclient.repository.file
+import cz.cvut.fit.bioop.hackernewsclient.Properties._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import cz.cvut.fit.bioop.hackernewsclient.model.cache.CacheData
 
@@ -7,7 +8,6 @@ import scala.io.Source
 
 class FileCacheSystemImpl extends FileSystem[CacheData] {
 
-  private val CACHE_FIlE_NAME = "cachedData.json"
 
   override def loadData(): Option[CacheData] ={
     try{

@@ -1,5 +1,6 @@
 package cz.cvut.fit.bioop.hackernewsclient.repository.cache
 
+import cz.cvut.fit.bioop.hackernewsclient.Properties._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import cz.cvut.fit.bioop.hackernewsclient.converter.Serializable
 import cz.cvut.fit.bioop.hackernewsclient.model.api.Update
@@ -8,9 +9,6 @@ import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileSystem
 
 class CacheImpl(ttl: Option[Long],
                 fileSystem: FileSystem[CacheData]) extends Cache {
-
-  private val DEFAULT_TTL = 30 * 6000L
-  private val DEFAULT_UPDATE_TIME = 10L * 60 * 1000L
 
   override def saveEntity[T, ID](entity: T, id: ID)(implicit converter: Serializable[T]): Unit = {
     val cacheEntity = CacheEntity(

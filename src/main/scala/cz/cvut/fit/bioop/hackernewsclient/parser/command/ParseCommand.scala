@@ -22,19 +22,19 @@ class ParseCommand(receiver: CommandReceiver) {
    * @return Command which has to be executed
    */
   def getCommand(command: String,
-                 commandOptions: Option[CommandOptions]): Command = {
+                 commandOptions: Option[CommandOptions]): Option[Command] = {
 
     try {
       command match {
-        case "top-stories" => topStoriesCommand(commandOptions)
-        case "user" => userCommand(commandOptions)
-        case "user-stories" => userStoriesCommand(commandOptions)
-        case "comments" => commentsCommand(commandOptions)
-        case "clear-cache" => clearCacheCommand()
-        case _ => new ErrorCommand("Unknown command")
+        case "top-stories" => Some(topStoriesCommand(commandOptions))
+        case "user" => Some(userCommand(commandOptions))
+        case "user-stories" => Some(userStoriesCommand(commandOptions))
+        case "comments" => Some(commentsCommand(commandOptions))
+        case "clear-cache" => Some(clearCacheCommand())
+        case _ => Some(new ErrorCommand("Unknown command"))
       }
     }catch {
-      case _: Throwable => new ErrorCommand("Command parsing error. Wrong option arguments")
+      case _: Throwable => Some(new ErrorCommand("Command parsing error. Wrong option arguments"))
     }
   }
 

@@ -25,10 +25,11 @@ object Main {
       val repository: Repository = new RepositoryImpl(restApi)
       val commandReceiver = new CommandReceiver(renderer, repository)
       val commandParser = new CommandParser(new ParseCommand(commandReceiver), new ParseOption, commandReceiver)
-      val command: Command = commandParser.parseCommand(inputArguments)
+      val command: Option[Command] = commandParser.parseCommand(inputArguments)
       val controller: Controller = new HackerNewsController
 
-      controller.execute(command)
+
+      controller.execute(command.getOrElse(new ErrorCommand("Command is None")))
     }
   }
 }

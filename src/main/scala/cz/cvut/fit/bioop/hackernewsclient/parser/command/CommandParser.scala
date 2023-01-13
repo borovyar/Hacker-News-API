@@ -17,18 +17,20 @@ class CommandParser(parseCommand: ParseCommand,
    * @param args application input
    * @return Command which should be executed
    */
-  def parseCommand(args: InputArguments): Command = {
+  def parseCommand(args: InputArguments): Option[Command] = {
 
-    args.option.flatMap(option => return parseOption.getOption(receiver, option))
+    args.option.flatMap(option => return Some(parseOption.getOption(receiver, option)))
 
     val commandOptions = Some(ParseCommandOptions.getCommandOptions(args.commandOptions))
 
-    if(commandOptions == null)
-      return new ErrorCommand("Wrong command")
+    if(commandOptions.isEmpty)
+      return Some(new ErrorCommand("Wrong command"))
 
-    parseCommand.getCommand(
-      args.command.getOrElse(return new ErrorCommand("Empty command")),
+    val resultCommand = parseCommand.getCommand(
+      args.command.getOrElse(return Some(new ErrorCommand("Empty command"))),
       commandOptions
     )
+
+    resultCommand
   }
 }
