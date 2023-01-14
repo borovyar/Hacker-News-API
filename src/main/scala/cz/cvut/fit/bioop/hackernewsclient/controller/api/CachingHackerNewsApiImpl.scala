@@ -1,5 +1,4 @@
 package cz.cvut.fit.bioop.hackernewsclient.controller.api
-import cz.cvut.fit.bioop.hackernewsclient.converter.Serializer._
 import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, Update, User}
 import cz.cvut.fit.bioop.hackernewsclient.repository.cache.Cache
 
