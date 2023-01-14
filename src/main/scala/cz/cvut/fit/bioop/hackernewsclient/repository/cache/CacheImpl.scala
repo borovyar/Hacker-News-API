@@ -60,22 +60,6 @@ class CacheImpl(ttl: Option[Long],
     deleteUsers(cacheEntities, update.profiles)
   }
 
-  private def deleteItems(cacheEntities: Seq[CacheEntity],
-                          ids: Seq[Int]): Unit = {
-    val updatedCache = cacheEntities.filter(
-      entity => ids.indexOf(entity.id.toInt) == -1
-    )
-    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
-  }
-
-  private def deleteUsers(cacheEntities: Seq[CacheEntity],
-                          ids: Seq[String]): Unit = {
-    val updatedCache = cacheEntities.filter(
-      entity => ids.indexOf(entity.id) == -1
-    )
-    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
-  }
-
   override def getUser(id: String): Option[User] = {
     val cacheEntity = fileSystem.loadEntity[id.type](id)
 
@@ -113,5 +97,21 @@ class CacheImpl(ttl: Option[Long],
     } catch {
       case _: Throwable => None
     }
+  }
+
+  private def deleteItems(cacheEntities: Seq[CacheEntity],
+                          ids: Seq[Int]): Unit = {
+    val updatedCache = cacheEntities.filter(
+      entity => ids.indexOf(entity.id.toInt) == -1
+    )
+    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
+  }
+
+  private def deleteUsers(cacheEntities: Seq[CacheEntity],
+                          ids: Seq[String]): Unit = {
+    val updatedCache = cacheEntities.filter(
+      entity => ids.indexOf(entity.id) == -1
+    )
+    fileSystem.saveData(CacheData(System.currentTimeMillis(), updatedCache))
   }
 }

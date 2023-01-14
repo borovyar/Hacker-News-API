@@ -10,7 +10,7 @@ case class User(@key("id") id: String,
                 @key("created") created: Long,
                 @key("karma") karma: Int,
                 @key("about") about: Option[String] = None,
-                @key("submitted") submitted: Option[Seq[Int]] = None) extends Entity{
+                @key("submitted") submitted: Option[Seq[Int]] = None){
 }
 
 object User {

@@ -19,7 +19,7 @@ class ParseCommand(receiver: CommandReceiver) {
    *
    * @param command string which should be command
    * @param commandOptions to customize command
-   * @return Command which has to be executed
+   * @return option of command which has to be executed
    */
   def getCommand(command: String,
                  commandOptions: Option[CommandOptions]): Option[Command] = {

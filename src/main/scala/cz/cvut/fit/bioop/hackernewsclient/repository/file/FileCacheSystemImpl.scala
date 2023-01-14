@@ -11,7 +11,7 @@ class FileCacheSystemImpl extends FileSystem[CacheData] {
 
   override def loadData(): Option[CacheData] ={
     try{
-      val buffer = Source.fromFile(CACHE_FIlE_NAME)
+      val buffer = Source.fromFile(CACHE_FILE_NAME)
       val strings = buffer.getLines().mkString; buffer.close()
 
       Some(read[CacheData](strings))
@@ -21,14 +21,14 @@ class FileCacheSystemImpl extends FileSystem[CacheData] {
   }
 
   override def saveData(cacheData: CacheData): Unit = {
-    val printWriter = new PrintWriter(new File(CACHE_FIlE_NAME))
+    val printWriter = new PrintWriter(new File(CACHE_FILE_NAME))
 
     printWriter.write(write(cacheData))
     printWriter.close()
   }
 
   override def clearData(): Unit = {
-    val file = new File(CACHE_FIlE_NAME)
+    val file = new File(CACHE_FILE_NAME)
 
     if(file != null && file.exists())
       file.delete()

@@ -5,22 +5,12 @@ import cz.cvut.fit.bioop.hackernewsclient.repository.cache.Cache
 
 class CachingHackerNewsApiImpl(api: HackerNewsApi,
                                cache: Cache) extends HackerNewsApi with CacheApi {
-  /**   *
-   * Loads top stories from Hacker News API
-   *
-   * @return sequence of the top stories' ids
-   */
+
   override def loadTopStories(): Seq[Int] = {
     checkCacheUpdate()
     api.loadTopStories()
   }
 
-  /** *
-   * Loads story using an id from Hacker News API
-   *
-   * @param id of the needed story
-   * @return Optional of the needed story
-   */
   override def loadStoryById(id: Int): Option[Story] = {
     val cachedStory = cache.getStory(id)
 
@@ -36,12 +26,6 @@ class CachingHackerNewsApiImpl(api: HackerNewsApi,
 
   }
 
-  /** *
-   * Loads comment using an id from Hacker News API
-   *
-   * @param id of the needed comment
-   * @return Optional of the needed comment
-   */
   override def loadCommentById(id: Int): Option[Comment] = {
     checkCacheUpdate()
 
@@ -58,12 +42,6 @@ class CachingHackerNewsApiImpl(api: HackerNewsApi,
     })
   }
 
-  /** *
-   * Loads user using an id from Hacker News API
-   *
-   * @param id of the needed user
-   * @return Optional of the needed user
-   */
   override def loadUserById(id: String): Option[User] = {
     checkCacheUpdate()
 

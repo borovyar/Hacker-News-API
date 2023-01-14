@@ -15,7 +15,7 @@ class CommandParser(parseCommand: ParseCommand,
    * Determines correct commands with their options for application input
    *
    * @param args application input
-   * @return Command which should be executed
+   * @return option of command which should be executed
    */
   def parseCommand(args: InputArguments): Option[Command] = {
 

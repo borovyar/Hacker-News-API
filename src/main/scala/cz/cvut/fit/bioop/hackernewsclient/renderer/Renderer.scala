@@ -5,15 +5,13 @@ import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, User}
 import java.io.OutputStream
 
 /***
- * Separate renderer which print entities to output streams
+ * Separate renderer which prints entities to the output streams
  */
 trait Renderer {
 
-  /***
-   * Prints entity to the Console as output stream
-   *
-   * @param entity which should be printed
-   * @tparam T type of following entity
+  /**
+   * Prints message to the console
+   * @param message which should be printed
    */
   def renderToConsole(message: String): Unit
 
@@ -27,8 +25,22 @@ trait Renderer {
    */
   def renderToOutputStream[T](entity: T, out: OutputStream): Unit
 
+  /**
+   * Prints to the console entity of Story
+   * @param story which should be printed
+   */
   def renderStory(story: Story): Unit
+
+  /**
+   * Prints to the console entity of Comment
+   * @param comment which should be printed
+   */
   def renderComment(comment: Comment): Unit
+
+  /**
+   * Prints to the console entity of User
+   * @param user which should be printed
+   */
   def renderUser(user: User): Unit
 
 }

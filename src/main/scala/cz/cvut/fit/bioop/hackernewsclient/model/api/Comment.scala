@@ -9,7 +9,7 @@ import upickle.implicits.key
 case class Comment(@key("id") id: Int,
                    @key("by") author: Option[String] = None,
                    @key("time") created: Option[Long] = None,
-                   @key("text") text: Option[String] = None) extends Entity {
+                   @key("text") text: Option[String] = None){
 
 }
 

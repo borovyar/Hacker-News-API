@@ -7,23 +7,12 @@ class RepositoryImpl(api: HackerNewsApi with CacheApi) extends Repository {
 
   private def loadStoryById(id: Int) : Option[Story] = api.loadStoryById(id)
 
-  /**   *
-   * Loads top stories from Hacker News API
-   *
-   * @return sequence of the top stories' ids
-   */
   override def loadTopStories(pageOptions: PagingOptions): Seq[Story] = {
     val topStoryIds = api.loadTopStories()
     val pagedIds = getPagedIds(topStoryIds, pageOptions)
     pagedIds.flatMap(loadStoryById)
   }
 
-  /** *
-   * Loads comment using an id from Hacker News API
-   *
-   * @param id of the needed comment
-   * @return Optional of the needed comment
-   */
   override def loadCommentsById(id: Int,
                                pagingOptions: PagingOptions): Seq[Comment] = {
     val story = loadStoryById(id)
@@ -35,12 +24,6 @@ class RepositoryImpl(api: HackerNewsApi with CacheApi) extends Repository {
     resultIds.flatMap(id => api.loadCommentById(id))
   }
 
-  /** *
-   * Loads user using an id from Hacker News API
-   *
-   * @param id of the needed user
-   * @return Optional of the needed user
-   */
   override def loadUserById(id: String): Option[User] = {
     api.loadUserById(id)
   }

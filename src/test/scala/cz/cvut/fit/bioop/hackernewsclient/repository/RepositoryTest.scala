@@ -2,10 +2,11 @@ package cz.cvut.fit.bioop.hackernewsclient.repository
 
 import cz.cvut.fit.bioop.hackernewsclient.controller.api.{CacheApi, HackerNewsApi}
 import cz.cvut.fit.bioop.hackernewsclient.model.PagingOptions
-import cz.cvut.fit.bioop.hackernewsclient.model.api.{Story, User}
+import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, User}
 import org.mockito.ArgumentMatchersSugar.any
 import org.mockito.MockitoSugar._
 import org.scalatest.funsuite.AnyFunSuite
+
 
 class RepositoryTest extends AnyFunSuite{
 
@@ -62,25 +63,27 @@ class RepositoryTest extends AnyFunSuite{
     assert(resultJlWithPage.size == 1 && resultJl.last == expectedStory)
   }
 
-//  test("Load comments from repository with paging"){
-//    val id = 0
-//    val idOther = 1
-//    val expected = User(idJl, 0L, 0, None, Some(Seq(0,1,2)))
-//    val expectedUserWithoutStories = User(idOther, 0L, 0)
-//    val expectedStory = Story(1)
-//
-//    when(hackerNewsApi.loadUserById(idJl)).thenReturn(Some(expected))
-//    when(hackerNewsApi.loadUserById(idOther)).thenReturn(Some(expectedUserWithoutStories))
-//    when(hackerNewsApi.loadStoryById(any[Int])).thenReturn(Some(expectedStory))
-//
-//    val resultOther = repository.loadUserStories(expectedUserWithoutStories, defaultOption)
-//    val resultJl = repository.loadUserStories(expected, defaultOption)
-//    val resultJlWithPage = repository.loadUserStories(expected, pageOption)
-//
-//
-//    assert(resultOther.isEmpty)
-//    assert(resultJl.size == 3 && resultJl.last == expectedStory)
-//    assert(resultJlWithPage.size == 1 && resultJl.last == expectedStory)
-//  }
+  test("Load comments from repository with paging"){
+    val idStory = 0; val idStoryWithoutComments = 1
+    val expectedStory = Story(idStory, None, Some(Seq(0,1)))
+    val expectedStoryWithoutComments = Story(idStoryWithoutComments)
+
+    val idComment = 0
+    val expectedComment = Comment(idComment)
+
+    when(hackerNewsApi.loadStoryById(idStory)).thenReturn(Some(expectedStory))
+    when(hackerNewsApi.loadStoryById(idStoryWithoutComments)).thenReturn(Some(expectedStoryWithoutComments))
+
+    when(hackerNewsApi.loadCommentById(any[Int])).thenReturn(Some(expectedComment))
+
+    val resultWithComments = repository.loadCommentsById(idStory, defaultOption)
+    val resultWithout = repository.loadCommentsById(idStoryWithoutComments, defaultOption)
+    val resultPaged = repository.loadCommentsById(idStory, pageOption)
+
+
+    assert(resultWithout.isEmpty)
+    assert(resultWithComments.size == 2 && resultWithComments.last == expectedComment)
+    assert(resultPaged.size == 1 && resultPaged.last == expectedComment)
+  }
 
 }
