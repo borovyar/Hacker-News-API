@@ -6,7 +6,6 @@ import cz.cvut.fit.bioop.hackernewsclient.model.cache.CacheEntity
 
 
 object Serializer {
-
   implicit val commentToJson: Serializable[Comment] = (comment: Comment) => {write(comment)}
 
   implicit val userToJson: Serializable[User] = (user: User) => write(user)

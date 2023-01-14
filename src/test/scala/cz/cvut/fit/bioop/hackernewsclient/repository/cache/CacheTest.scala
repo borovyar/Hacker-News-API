@@ -1,30 +1,23 @@
 package cz.cvut.fit.bioop.hackernewsclient.repository.cache
 
 import cz.cvut.fit.bioop.hackernewsclient.Properties
-import cz.cvut.fit.bioop.hackernewsclient.converter.Serializer._
 import cz.cvut.fit.bioop.hackernewsclient.converter._
 import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, Update, User}
 import cz.cvut.fit.bioop.hackernewsclient.model.cache.{CacheData, CacheEntity}
 import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileSystem
+import cz.cvut.fit.bioop.hackernewsclient.util.TimeManager
 import org.mockito.ArgumentMatchersSugar.any
 import org.mockito.MockitoSugar._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
-
-import java.io.File
 
 class CacheTest extends AnyFunSuite with BeforeAndAfterEach{
 
 
 
   val fileSystem: FileSystem[CacheData] = mock[FileSystem[CacheData]]
-  val cache = new CacheImpl(Some(Properties.DEFAULT_TTL), fileSystem)
-
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    val cacheFile = new File(Properties.CACHE_TEST_FILE_NAME)
-    if (cacheFile.exists()) cacheFile.delete()
-  }
+  val timeManager = new TimeManager(Properties.DEFAULT_TTL)
+  val cache = new CacheImpl(fileSystem, timeManager)
 
   test("Save and find story"){
     val id = 0

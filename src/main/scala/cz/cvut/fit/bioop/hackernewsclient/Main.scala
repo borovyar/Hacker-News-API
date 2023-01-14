@@ -10,6 +10,7 @@ import cz.cvut.fit.bioop.hackernewsclient.renderer.{Renderer, RendererImpl}
 import cz.cvut.fit.bioop.hackernewsclient.repository.cache.CacheImpl
 import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileCacheSystemImpl
 import cz.cvut.fit.bioop.hackernewsclient.repository.{Repository, RepositoryImpl}
+import cz.cvut.fit.bioop.hackernewsclient.util.TimeManager
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -19,7 +20,9 @@ object Main {
       new ErrorCommand("Wrong input arguments").execute()
     else {
 
-      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(inputArguments.ttl, new FileCacheSystemImpl))
+      val timeManager = new TimeManager(inputArguments.ttl.getOrElse(Properties.DEFAULT_TTL))
+
+      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(new FileCacheSystemImpl(timeManager), timeManager))
       val renderer: Renderer = new RendererImpl
 
       val repository: Repository = new RepositoryImpl(restApi)

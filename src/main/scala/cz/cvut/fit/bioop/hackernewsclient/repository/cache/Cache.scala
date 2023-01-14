@@ -1,6 +1,6 @@
 package cz.cvut.fit.bioop.hackernewsclient.repository.cache
 
-import cz.cvut.fit.bioop.hackernewsclient.converter.Serializable
+import cz.cvut.fit.bioop.hackernewsclient.converter.Converter._
 import cz.cvut.fit.bioop.hackernewsclient.model.api.{Comment, Story, Update, User}
 
 /**
@@ -13,11 +13,10 @@ trait Cache {
    *
    * @param entity which would be saved
    * @param id of the entity
-   * @param converter to/from JSON
    * @tparam T type of the entity
    * @tparam ID type of the id
    */
-  def saveEntity[T, ID](entity: T, id: ID)(implicit converter: Serializable[T]): Unit
+  def saveEntity[T: Reader, ID](entity: T, id: ID): Unit
 
   /**
    * Finds user in the cache data
