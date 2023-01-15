@@ -22,7 +22,7 @@ object Main {
 
       val timeManager = new TimeManager(inputArguments.ttl.getOrElse(Properties.DEFAULT_TTL))
 
-      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(new FileCacheSystemImpl(timeManager), timeManager))
+      val restApi = new CachingHackerNewsApiImpl(new HackerNewsApiImpl, new CacheImpl(new FileCacheSystemImpl(timeManager, Properties.CACHE_FILE_NAME), timeManager))
       val renderer: Renderer = new RendererImpl
 
       val repository: Repository = new RepositoryImpl(restApi)

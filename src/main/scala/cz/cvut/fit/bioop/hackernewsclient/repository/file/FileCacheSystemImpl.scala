@@ -7,13 +7,14 @@ import cz.cvut.fit.bioop.hackernewsclient.util.TimeManager
 import java.io.{File, FileNotFoundException, PrintWriter}
 import scala.io.Source
 
-class FileCacheSystemImpl(timeManager: TimeManager) extends FileSystem[CacheData] {
+class FileCacheSystemImpl(timeManager: TimeManager,
+                          fileName: String) extends FileSystem[CacheData] {
 
 
   override def loadData(): Option[CacheData] ={
     try{
 
-      val buffer = Source.fromFile(CACHE_FILE_NAME)
+      val buffer = Source.fromFile(fileName)
       val strings = buffer.getLines().mkString; buffer.close()
 
       Some(read[CacheData](strings))
@@ -23,7 +24,7 @@ class FileCacheSystemImpl(timeManager: TimeManager) extends FileSystem[CacheData
   }
 
   override def saveData(cacheData: CacheData): Unit = {
-    val printWriter = new PrintWriter(new File(CACHE_FILE_NAME))
+    val printWriter = new PrintWriter(new File(fileName))
 
     printWriter.write(write(cacheData))
     printWriter.close()

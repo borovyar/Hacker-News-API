@@ -8,10 +8,9 @@ import cz.cvut.fit.bioop.hackernewsclient.repository.file.FileSystem
 import cz.cvut.fit.bioop.hackernewsclient.util.TimeManager
 import org.mockito.ArgumentMatchersSugar.any
 import org.mockito.MockitoSugar._
-import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 
-class CacheTest extends AnyFunSuite with BeforeAndAfterEach{
+class CacheTest extends AnyFunSuite{
 
 
 
